@@ -15,19 +15,45 @@ type LinkedList struct {
 
 // Добавление элемента в начало списка
 func (list *LinkedList) Prepend(value int) {
+
 	newNode := &Node{Value: value, Next: list.Head}
 	if list.Head == nil && list.Tail == nil {
 		list.Tail = newNode
+	} else {
+		list.Head.Previous = newNode
 	}
 	list.Head = newNode
 }
 
 // Печать всех элементов списка
-func (list *LinkedList) Print() {
+func (list *LinkedList) PrintForward() {
 	for node := list.Head; node != nil; node = node.Next {
-		fmt.Printf("%d -> ", node.Value)
+		fmt.Printf("%d ->previousVal-> ", node.Value)
+		if node.Previous != nil {
+			fmt.Println(node.Previous.Value)
+		} else {
+			fmt.Println(nil)
+		}
 	}
 	fmt.Println("nil")
+}
+
+// Печать всех элементов списка
+func (list *LinkedList) PrintBackward() {
+	for node := list.Tail; node != nil; node = node.Previous {
+		fmt.Printf("%d ->previousVal-> ", node.Value)
+		if node.Next != nil {
+			fmt.Println(node.Next.Value)
+		} else {
+			fmt.Println(nil)
+		}
+	}
+	fmt.Println("nil")
+}
+
+func (list *LinkedList) Invert() {
+
+	list.Tail, list.Head = list.Head, list.Tail
 }
 
 func main() {
@@ -35,5 +61,9 @@ func main() {
 	list.Prepend(1)
 	list.Prepend(2)
 	list.Prepend(3)
-	list.Print() // Вывод: 3 -> 2 -> 1 -> nil
+	list.PrintForward() // 3 ->previousVal-> <nil>; 2 ->previousVal-> 3;	1 ->previousVal-> 2; nil
+
+	fmt.Printf("list head val: %d\nlist tail val: %d\n", list.Head.Value, list.Tail.Value)
+
+	list.PrintBackward() // 1 ->previousVal-> <nil>;	2 ->previousVal-> 1; 3 ->previousVal-> 2; nil
 }
