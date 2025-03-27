@@ -52,7 +52,16 @@ func (list *LinkedList) PrintBackward() {
 }
 
 func (list *LinkedList) Invert() {
-
+	tempBuf := make([]*Node, 0)
+	//наполняем буфер адресами нод
+	for node := list.Head; node != nil; node = node.Next {
+		tempBuf = append(tempBuf, node)
+	}
+	//перебираем буфер адресов нод  и меняем местами ссылки на соседние элементы в ноде
+	for _, node := range tempBuf {
+		node.Next, node.Previous = node.Previous, node.Next
+	}
+	//меняем местами адреса головы и хвоста
 	list.Tail, list.Head = list.Head, list.Tail
 }
 
@@ -61,6 +70,7 @@ func main() {
 	list.Prepend(1)
 	list.Prepend(2)
 	list.Prepend(3)
+	list.Invert()
 	list.PrintForward() // 3 ->previousVal-> <nil>; 2 ->previousVal-> 3;	1 ->previousVal-> 2; nil
 
 	fmt.Printf("list head val: %d\nlist tail val: %d\n", list.Head.Value, list.Tail.Value)
